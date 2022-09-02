@@ -15,9 +15,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class CartController {
-    CartService cartService;
-    UserDTOService userDTOService;
-    ProductService productService;
+   private final CartService cartService;
+    private final UserDTOService userDTOService;
+    private final ProductService productService;
 
     @PostMapping("/cartOrder")
     public RedirectView order(@AuthenticationPrincipal User user, @RequestHeader(value = "referer", required = false) final String referer, final int id) {

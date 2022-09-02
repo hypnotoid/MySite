@@ -3,7 +3,6 @@ package com.hypnotoid.MySite.models;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.Date;
 
 public class CartEntry {
 

@@ -34,6 +34,7 @@ public class CartService {
                 if (amount > 0 && product != null) {
                     if (product.getAmount() >= amount) {
                         entry.setAmount(amount);
+                        entry.setTotal_price();
                     }
                 }
                 else cart.remove(entry);
