@@ -5,7 +5,7 @@ insert into mysite.items (amount, name, orders, price) values(14,'Book',3,75);
 insert into mysite.users (username, enabled, first_name, last_name, password) values ( 'admin', true,'Admin', 'Admin','$2a$10$dEv.pFKmpF2Ok/NxNS4iwecjiGHwrxrzGn0uVX72NEK7w01k68tQK');
 insert into mysite.users (username, enabled, first_name, last_name, password) values ('test',true,'TEST', 'TEST','$2a$10$qYPXUwwi5EOu4HDgTGiU7OlYQjqYu6APrRubImP4tfeqfCJzaSPBi');
 insert into mysite.users (username, enabled, first_name, last_name, password) values ( 'user', true,'User', 'User','$2a$10$dEv.pFKmpF2Ok/NxNS4iwecjiGHwrxrzGn0uVX72NEK7w01k68tQK');
-insert into mysite.users (username, enabled, first_name, last_name, password) values ( 'editor1', true,'User', 'User','$2a$10$dEv.pFKmpF2Ok/NxNS4iwecjiGHwrxrzGn0uVX72NEK7w01k68tQK');
+insert into mysite.users (username, enabled, first_name, last_name, password) values ( 'editor', true,'User', 'User','$2a$10$dEv.pFKmpF2Ok/NxNS4iwecjiGHwrxrzGn0uVX72NEK7w01k68tQK');
 insert into mysite.users (username, enabled, first_name, last_name, password) values ( 'user2', true,'User', 'User','$2a$10$dEv.pFKmpF2Ok/NxNS4iwecjiGHwrxrzGn0uVX72NEK7w01k68tQK');
 insert into mysite.users (username, enabled, first_name, last_name, password) values ( 'editor3', true,'User', 'User','$2a$10$dEv.pFKmpF2Ok/NxNS4iwecjiGHwrxrzGn0uVX72NEK7w01k68tQK');
 insert into mysite.roles (name) values ('ROLE_ADMIN'); -- 1 is ADMIN

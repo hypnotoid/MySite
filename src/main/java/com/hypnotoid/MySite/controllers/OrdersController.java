@@ -28,7 +28,7 @@ public class OrdersController {
         if (!userDTOService.existById(userId))  return "redirect:/usersList";
         orderService.deleteById(orderId);
         model.addAttribute("orders", orderService.listAllOrdersForUser(userId));
-        model.addAttribute("id", userId);
+        model.addAttribute("userId", userId);
         return "shop/orders";
     }
 
