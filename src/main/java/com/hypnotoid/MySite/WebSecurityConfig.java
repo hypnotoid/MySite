@@ -75,6 +75,7 @@ public class WebSecurityConfig /* extends WebSecurityConfigurerAdapter */ {
                 .antMatchers("/usersListSaveProcess").hasAnyAuthority(Roles.EDITOR.getName())
                 .antMatchers("/usersListSave").hasAnyAuthority(Roles.EDITOR.getName())
                 .antMatchers("/usersListEdit").hasAnyAuthority(Roles.EDITOR.getName())
+                .antMatchers("/usersListFind").hasAnyAuthority(Roles.EDITOR.getName())
                 //Admin page
                 .antMatchers("/admin").hasAnyAuthority(Roles.ADMIN.getName())
                 .antMatchers("/adminEncrypt").hasAnyAuthority(Roles.ADMIN.getName())
