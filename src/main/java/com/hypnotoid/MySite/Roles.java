@@ -1,14 +1,16 @@
 package com.hypnotoid.MySite;
 
 public enum Roles {
-    ADMIN("ROLE_ADMIN", 1), //ADMIN permissions:
-    // has access to any page on server,
-    // can add, remove, edit editors;
-    // has user_id = 1
-    // created by default
-    // IS EDITOR
-    // IS NOT USER
-    USER("ROLE_USER", 2), //USER permissions:
+    ADMIN("ROLE_ADMIN", 1),
+    //ADMIN permissions:
+    //has access to any page on server,
+    //can add, remove, edit editors;
+    //has user_id = 1
+    //created by default
+    //IS EDITOR
+    //IS NOT USER
+    USER("ROLE_USER", 2),
+    //USER permissions:
     //Just a regular user
     EDITOR("ROLE_EDITOR", 3),
     //EDITOR permissions:
