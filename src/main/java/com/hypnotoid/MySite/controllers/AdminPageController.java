@@ -10,18 +10,19 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class AdminPageController {
     private final BCryptPasswordEncoder encoder;
+
+    public AdminPageController(BCryptPasswordEncoder encoder) {
+        this.encoder = encoder;
+    }
+
     @GetMapping("/admin")
-    public String adminPage(){
+    public String adminPage() {
         return "adminPage";
     }
 
     @PostMapping("/adminEncrypt")
-    public RedirectView encryptPassword(RedirectAttributes attributes,String password){
-        attributes.addFlashAttribute("encoded",encoder.encode(password));
-       return new RedirectView("/admin");
-    }
-
-    public AdminPageController(BCryptPasswordEncoder encoder) {
-        this.encoder = encoder;
+    public RedirectView encryptPassword(RedirectAttributes attributes, String password) {
+        attributes.addFlashAttribute("encoded", encoder.encode(password));
+        return new RedirectView("/admin");
     }
 }

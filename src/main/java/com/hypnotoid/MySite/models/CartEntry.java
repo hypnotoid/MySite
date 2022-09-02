@@ -12,7 +12,7 @@ public class CartEntry {
     @NotNull
     private String product_name = null;
 
-    private int productAmount=0;
+    private int productAmount = 0;
 
     @Positive
     private double product_price = 0;
@@ -33,12 +33,16 @@ public class CartEntry {
         return product_name;
     }
 
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
+    }
+
     public double getProduct_price() {
         return product_price;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public void setProduct_price(double product_price) {
+        if (product_price > 0) this.product_price = product_price;
     }
 
     public int getProductAmount() {
@@ -47,10 +51,6 @@ public class CartEntry {
 
     public void setProductAmount(int productAmount) {
         this.productAmount = productAmount;
-    }
-
-    public void setProduct_price(double product_price) {
-        if (product_price > 0) this.product_price = product_price;
     }
 
     public double getTotal_price() {

@@ -11,8 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderDTOConverter {
 
-   private final UserService userService;
+    private final UserService userService;
     private final ProductService productService;
+
+    public OrderDTOConverter(UserService userService, ProductService productService) {
+        this.userService = userService;
+        this.productService = productService;
+    }
 
     public OrderDTO fromOrderToDTO(Order order) {
         if (order == null) return null;
@@ -40,10 +45,5 @@ public class OrderDTOConverter {
         order.setAmount(orderDTO.getAmount());
         order.setOrderDate(orderDTO.getOrderDate());
         return order;
-    }
-
-    public OrderDTOConverter(UserService userService, ProductService productService) {
-        this.userService = userService;
-        this.productService = productService;
     }
 }

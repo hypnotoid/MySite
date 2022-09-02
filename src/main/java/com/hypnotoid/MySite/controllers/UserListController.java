@@ -26,17 +26,22 @@ public class UserListController {
 
     private final UserDTOValidator validator;
 
+    public UserListController(BCryptPasswordEncoder encoder, UserDTOService userDTOService, UserDTOValidator validator) {
+        this.encoder = encoder;
+        this.userDTOService = userDTOService;
+        this.validator = validator;
+    }
+
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validator);
     }
 
     @GetMapping("/usersList")
-    public String listUsers(Model model,@AuthenticationPrincipal User userAuth ) {
-        model.addAttribute("loggedUserId",userAuth.getId());
+    public String listUsers(Model model, @AuthenticationPrincipal User userAuth) {
+        model.addAttribute("loggedUserId", userAuth.getId());
         model.addAttribute("listUsers", userDTOService.getAll());
-        if (model.getAttribute("org.springframework.validation.BindingResult.user") == null
-                && model.asMap().get("user") == null) {
+        if (model.getAttribute("org.springframework.validation.BindingResult.user") == null && model.asMap().get("user") == null) {
             model.addAttribute("user", userDTOService.create());
         }
         return "shop/usersList";
@@ -53,12 +58,10 @@ public class UserListController {
         if (br.hasErrors()) {
             attributes.addFlashAttribute("org.springframework.validation.BindingResult.user", br);
             attributes.addFlashAttribute("user", user);
-        }
-        else if (user.getId() == 0) { //if user is not exist
+        } else if (user.getId() == 0) { //if user is not exist
             user.setPassword(encoder.encode(user.getPassword()));
             userDTOService.add(user);
-        }
-        else {
+        } else {
             user.setPassword(encoder.encode(user.getPassword()));
             userDTOService.edit(user);
         }
@@ -67,29 +70,21 @@ public class UserListController {
 
     @PostMapping("/usersListSave")
     public RedirectView editUser(RedirectAttributes attributes, int id) {
-        //UserDTO userDTO = userDTOService.getById(id);
-       // if (userDTO != null)  {
-            attributes.addFlashAttribute("user", userDTOService.getById(id)); //can be null
-       // }
+        attributes.addFlashAttribute("user", userDTOService.getById(id)); //can be null
         return new RedirectView("/usersList");
     }
+
     @GetMapping("/usersListFind")
-    public String bugFix(){
+    public String bugFix() {
         return ("redirect:/usersList");
-    }
-    @PostMapping(value = "/usersListFind")
-    public String productsListFind(Model model, String find,@AuthenticationPrincipal User userAuth ) {
-        model.addAttribute("loggedUserId",userAuth.getId());
-        model.addAttribute("listUsers", userDTOService.find(find));
-        return ("shop/usersListFind");
     }
 
     //@Autowired
 
-
-    public UserListController(BCryptPasswordEncoder encoder, UserDTOService userDTOService, UserDTOValidator validator) {
-        this.encoder = encoder;
-        this.userDTOService = userDTOService;
-        this.validator = validator;
+    @PostMapping(value = "/usersListFind")
+    public String productsListFind(Model model, String find, @AuthenticationPrincipal User userAuth) {
+        model.addAttribute("loggedUserId", userAuth.getId());
+        model.addAttribute("listUsers", userDTOService.find(find));
+        return ("shop/usersListFind");
     }
 }

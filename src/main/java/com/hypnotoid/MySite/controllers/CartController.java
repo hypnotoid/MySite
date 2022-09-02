@@ -3,7 +3,6 @@ package com.hypnotoid.MySite.controllers;
 import com.hypnotoid.MySite.models.User;
 import com.hypnotoid.MySite.services.CartService;
 import com.hypnotoid.MySite.services.ProductService;
-import com.hypnotoid.MySite.services.UserDTOService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +14,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class CartController {
-   private final CartService cartService;
-    private final UserDTOService userDTOService;
+    private final CartService cartService;
     private final ProductService productService;
+
+    public CartController(CartService cartService, ProductService productService) {
+        this.cartService = cartService;
+        this.productService = productService;
+    }
 
     @PostMapping("/cartOrder")
     public RedirectView order(@AuthenticationPrincipal User user, @RequestHeader(value = "referer", required = false) final String referer, final int id) {
@@ -42,15 +45,13 @@ public class CartController {
     public String cartEdit(@AuthenticationPrincipal User user, final int id, final int amount, Model model) {
         if (productService.getAmountForID(id) < amount) {
             model.addAttribute("error", "Слишком много");
-        }
-        else {
+        } else {
             cartService.setAmount(id, amount, user.getCart());
         }
         model.addAttribute("cart", user.getCart());
         model.addAttribute("total_price", cartService.getTotalPrice(user.getCart()));
         return "shop/cart";
     }
-
 
     @PostMapping("/cartDelete")
     public String cartDelete(@AuthenticationPrincipal User user, final int id) {
@@ -62,11 +63,5 @@ public class CartController {
     public String buy(@AuthenticationPrincipal User user) {
         cartService.order(user.getCart(), user.getId());
         return "redirect:/";
-    }
-
-    public CartController(CartService cartService, UserDTOService userDTOService, ProductService productService) {
-        this.cartService = cartService;
-        this.userDTOService = userDTOService;
-        this.productService = productService;
     }
 }

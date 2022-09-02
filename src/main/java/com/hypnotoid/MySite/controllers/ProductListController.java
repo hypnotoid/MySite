@@ -23,6 +23,11 @@ public class ProductListController {
     private final ProductService productService;
     private final ProductValidator validator;
 
+    public ProductListController(ProductService productService, ProductValidator validator) {
+        this.productService = productService;
+        this.validator = validator;
+    }
+
     @GetMapping("/productsList")
     public String listProducts(Model model) {
         model.addAttribute("products", productService.getAll());
@@ -31,7 +36,6 @@ public class ProductListController {
         }
         return "shop/productsList";
     }
-
 
     @PostMapping("/productsListDelete")
     public RedirectView productsDelete(int id, RedirectAttributes attributes) {
@@ -49,11 +53,9 @@ public class ProductListController {
         if (br.hasErrors()) {
             attributes.addFlashAttribute("org.springframework.validation.BindingResult.product", br);
             attributes.addFlashAttribute("product", product);
-        }
-        else if (product.getId() == 0) {
+        } else if (product.getId() == 0) {
             productService.add(product);
-        }
-        else productService.edit(product);
+        } else productService.edit(product);
         // attributes.addAttribute("product",productService.create());
         return new RedirectView("/productsList");
     }
@@ -85,10 +87,5 @@ public class ProductListController {
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validator);
-    }
-
-    public ProductListController(ProductService productService, ProductValidator validator) {
-        this.productService = productService;
-        this.validator = validator;
     }
 }

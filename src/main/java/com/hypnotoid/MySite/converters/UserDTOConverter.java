@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 public class UserDTOConverter {
     private final RoleService roleService;
     private final BCryptPasswordEncoder encoder;
+
+    public UserDTOConverter(RoleService roleService, BCryptPasswordEncoder encoder) {
+        this.roleService = roleService;
+        this.encoder = encoder;
+    }
+
     public UserDTO fromUserToDTO(User user) {
         if (user == null) return null;
         UserDTO dto = new UserDTO();
@@ -29,24 +35,17 @@ public class UserDTOConverter {
         User user = new User();
         user.setId(userDTO.getId());
         user.setUsername(userDTO.getUsername());
-        if (userDTO.getPassword().length()<35) userDTO.setPassword(encoder.encode(userDTO.getPassword()));
+        if (userDTO.getPassword().length() < 35) userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         user.setPassword(userDTO.getPassword());
         user.setFirstname(userDTO.getFirstname());
         user.setLastname(userDTO.getLastname());
         user.setEnabled(userDTO.isEnabled());
         if (userDTO.isRoleEditor()) {
             user.setRoles(roleService.set(false, true, false));
-        }
-        else {
+        } else {
             user.setRoles(roleService.set(false, false, true));
         }
         user.setCart(userDTO.getCart());
         return user;
-    }
-
-
-    public UserDTOConverter(RoleService roleService, BCryptPasswordEncoder encoder) {
-        this.roleService = roleService;
-        this.encoder = encoder;
     }
 }

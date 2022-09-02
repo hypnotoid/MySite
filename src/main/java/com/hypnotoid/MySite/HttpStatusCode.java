@@ -81,6 +81,13 @@ public enum HttpStatusCode {
         this.description = description;
     }
 
+    public static HttpStatusCode getByValue(final int value) {
+        for (HttpStatusCode status : values()) {
+            if (status.value == value) return status;
+        }
+        throw new IllegalArgumentException("Invalid status code: " + value);
+    }
+
     public int getValue() {
         return value;
     }
@@ -92,12 +99,5 @@ public enum HttpStatusCode {
     @Override
     public String toString() {
         return value + " " + description;
-    }
-
-    public static HttpStatusCode getByValue(final int value) {
-        for (HttpStatusCode status : values()) {
-            if (status.value == value) return status;
-        }
-        throw new IllegalArgumentException("Invalid status code: " + value);
     }
 }

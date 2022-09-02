@@ -9,6 +9,7 @@ import java.util.Set;
 @Repository
 public interface RoleRepository extends CrudRepository<Role, Integer> {
     Role getRoleById(int id);
+
     Role getRoleByName(String name);
 
     Set<Role> findAll();

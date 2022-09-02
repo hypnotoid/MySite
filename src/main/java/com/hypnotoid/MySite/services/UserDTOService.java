@@ -4,12 +4,10 @@ package com.hypnotoid.MySite.services;
 import com.hypnotoid.MySite.converters.UserDTOConverter;
 import com.hypnotoid.MySite.dto.UserDTO;
 import com.hypnotoid.MySite.models.User;
-import com.hypnotoid.MySite.repositories.OrderRepository;
 import com.hypnotoid.MySite.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-;
 
 
 @Service
@@ -21,6 +19,13 @@ public class UserDTOService { //DAO data access object. returns userDTO
 
     private final OrderDTOService orderDTOService;
 
+    public UserDTOService(UserRepository userRepo, UserDTOConverter converter, RoleService roleService, OrderDTOService orderDTOService) {
+        this.userRepo = userRepo;
+        this.converter = converter;
+        this.roleService = roleService;
+        this.orderDTOService = orderDTOService;
+    }
+
     public List<UserDTO> getAll() {
         List<UserDTO> users = new ArrayList<>();
         for (com.hypnotoid.MySite.models.User u : userRepo.findAll()) {
@@ -31,17 +36,14 @@ public class UserDTOService { //DAO data access object. returns userDTO
 
     public UserDTO getById(final int id) {
         Optional<User> user = userRepo.findById(id);
-        if (user.isPresent()) {
-            return converter.fromUserToDTO(user.get());
-        }
-        return null;
+        return user.map(converter::fromUserToDTO).orElse(null);
     }
 
     public Set<UserDTO> convert(Set<User> users) {
         if (users == null) return null;
-       Set<UserDTO> userDTOS = new HashSet<>();
+        Set<UserDTO> userDTOS = new HashSet<>();
         for (User user : users) {
-             userDTOS.add(converter.fromUserToDTO(user));
+            userDTOS.add(converter.fromUserToDTO(user));
         }
         return userDTOS;
     }
@@ -54,7 +56,7 @@ public class UserDTOService { //DAO data access object. returns userDTO
         return null;
     }
 
-    public boolean existById(final int id) {
+    public boolean notExistById(final int id) {
         return userRepo.existsUserById(id);
     }
 
@@ -68,7 +70,7 @@ public class UserDTOService { //DAO data access object. returns userDTO
             User user = userOptional.get();
             if (roleService.isAdmin(user)) return;
             orderDTOService.deleteByUser(user);
-         //   orderRepo.deleteAllByUser(user);
+            //   orderRepo.deleteAllByUser(user);
             user.setRoles(null);
             userRepo.save(user);
             userRepo.deleteById(id);
@@ -95,18 +97,10 @@ public class UserDTOService { //DAO data access object. returns userDTO
         return convert(users);
     }
 
-
     public void add(UserDTO userDTO) {
         if (userDTO == null) return;
         if (!userRepo.existsUserById(userDTO.getId())) {
             userRepo.save(converter.fromDTOToUser(userDTO));
         }
-    }
-
-    public UserDTOService(UserRepository userRepo, UserDTOConverter converter, RoleService roleService, OrderDTOService orderDTOService) {
-        this.userRepo = userRepo;
-        this.converter = converter;
-        this.roleService = roleService;
-        this.orderDTOService = orderDTOService;
     }
 }

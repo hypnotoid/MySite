@@ -13,7 +13,7 @@ import java.util.Set;
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @Column(name="user_id")
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -31,60 +31,97 @@ public class User implements UserDetails {
     @Column
     private boolean enabled = true;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name="role_id")
-    )
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-   @Transient
+    @Transient
     private Set<CartEntry> cart = new HashSet<>();
 
-   //private String address;
 
-   //private int phoneNumber;
+    public int getId() {
+        return id;
+    }
 
-
-    public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
-
-
-    public String getUsername() {return username;}
-    public void setUsername(String username) {this.username = username;}
+    public void setId(int id) {
+        this.id = id;
+    }
 
 
-    public String getPassword() {return password;}
-    public void setPassword(String password) {this.password = password;}
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
 
-    public String getFirstname() {return firstname;}
-    public void setFirstname(String firstname) {this.firstname = firstname;}
+    public String getPassword() {
+        return password;
+    }
 
-    public String getLastname() {return lastname;}
-    public void setLastname(String lastname) {this.lastname = lastname;}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public boolean isEnabled() {return enabled;}
-    public void setEnabled(boolean enabled) {this.enabled = enabled;}
 
-    public Set<Role> getRoles() {return roles;}
-    public void setRoles(Set<Role> roles) {this.roles = roles;}
+    public String getFirstname() {
+        return firstname;
+    }
 
-    public Set<CartEntry> getCart() {return cart;}
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
 
-    public void setCart(Set<CartEntry> cart) {this.cart = cart;}
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<CartEntry> getCart() {
+        return cart;
+    }
+
+    public void setCart(Set<CartEntry> cart) {
+        this.cart = cart;
+    }
 
 
     @Override
-    public boolean isAccountNonExpired() {return true;}
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
     @Override
-    public boolean isAccountNonLocked() {return true;}
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
     @Override
-    public boolean isCredentialsNonExpired() {return true;}
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getName()));

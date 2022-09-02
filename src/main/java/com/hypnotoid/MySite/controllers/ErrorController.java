@@ -12,16 +12,16 @@ public class ErrorController {
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @RequestMapping("/403")
-    public String error403(){
+    public String error403() {
         return "error";
     }
 
-   @RequestMapping(value = "/error",method = RequestMethod.GET)
-    public String errorPageget() {
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String errorPageGet() {
         return "error";
     }
 
-    @RequestMapping(value = "/error",method = RequestMethod.POST)
+    @RequestMapping(value = "/error", method = RequestMethod.POST)
     public String errorPage() {
         return "error";
     }

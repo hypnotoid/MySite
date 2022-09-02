@@ -8,21 +8,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.security.Principal;
 
 @Controller
 public class HomeController {
-    private final  ProductService productService;
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String homepage(Model model, @AuthenticationPrincipal User user) {
-        if (user != null) model.addAttribute("username",user.getUsername());
-        model.addAttribute("products",productService.removeAmount0(productService.getTop10()));
-        return "shop/home";
-    }
+    private final ProductService productService;
 
     //@Autowired
     public HomeController(ProductService productService) {
         this.productService = productService;
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String homepage(Model model, @AuthenticationPrincipal User user) {
+        if (user != null) model.addAttribute("username", user.getUsername());
+        model.addAttribute("products", productService.removeAmount0(productService.getTop10()));
+        return "shop/home";
     }
 }

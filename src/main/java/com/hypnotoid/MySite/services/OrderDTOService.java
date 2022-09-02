@@ -11,27 +11,36 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class OrderDTOService {
-   private final OrderRepository orderRepo;
-   private final UserService userService;
+    private final OrderRepository orderRepo;
+    private final UserService userService;
 
-   private final OrderDTOConverter converter;
+    private final OrderDTOConverter converter;
 
-   private final ProductService productService;
+    private final ProductService productService;
 
-    public List<OrderDTO> listAllOrdersForUser(int userid){
+    public OrderDTOService(OrderRepository orderRepo, UserService userService, OrderDTOConverter converter, ProductService productService) {
+        this.orderRepo = orderRepo;
+        this.userService = userService;
+        this.converter = converter;
+        this.productService = productService;
+    }
+
+    public List<OrderDTO> listAllOrdersForUser(int userid) {
         List<OrderDTO> out = new ArrayList<>();
-        for (Order order: orderRepo.findAll()){
-            if (order.getUser().getId()==userid) out.add(converter.fromOrderToDTO(order));
+        for (Order order : orderRepo.findAll()) {
+            if (order.getUser().getId() == userid) out.add(converter.fromOrderToDTO(order));
         }
         return out;
     }
-    public OrderDTO create(){
+
+    public OrderDTO create() {
         return new OrderDTO();
     }
 
-    public void add(final int productId, final int userId, int amount){
+    public void add(final int productId, final int userId, int amount) {
         OrderDTO order = new OrderDTO();
         order.setUserId(userId);
         order.setUsername(userService.getById(userId).getUsername());
@@ -44,32 +53,23 @@ public class OrderDTOService {
         orderRepo.save(converter.fromDTOToOrder(order));
     }
 
-    public void deleteById(int id){
+    public void deleteById(int id) {
         Optional<Order> get = orderRepo.findById(id);
-        if(get.isPresent()) {
-           Order order = get.get();
+        if (get.isPresent()) {
+            Order order = get.get();
             order.setUser(null);
             order.setProduct(null);
             orderRepo.save(order);
             orderRepo.deleteById(id);
         }
     }
+
     public void deleteByUser(User user) {
         orderRepo.deleteAllByUser(user);
     }
 
-
     public OrderDTO getById(final int id) {
         Optional<Order> order = orderRepo.findById(id);
-        if(order.isPresent()){
-            return converter.fromOrderToDTO(order.get());
-        } else return null;
-    }
-
-    public OrderDTOService(OrderRepository orderRepo, UserService userService, OrderDTOConverter converter, ProductService productService) {
-        this.orderRepo = orderRepo;
-        this.userService = userService;
-        this.converter = converter;
-        this.productService = productService;
+        return order.map(converter::fromOrderToDTO).orElse(null);
     }
 }

@@ -83,7 +83,7 @@ public class OrderDTO {
     }
 
     public void setTotal_price() {
-        totalPrice = amount* productPrice;
+        totalPrice = amount * productPrice;
     }
 
     public Date getOrderDate() {

@@ -9,20 +9,22 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public interface UserRepository extends CrudRepository<User,Integer> {
+public interface UserRepository extends CrudRepository<User, Integer> {
 
 
     User findByUsername(String login);
 
 
     Set<User> findUsersByUsernameContainsIgnoreCase(String name);
+
     Set<User> findUsersByFirstnameContainsIgnoreCase(String name);
-   Set<User> findUsersByLastnameContainsIgnoreCase(String name);
+
+    Set<User> findUsersByLastnameContainsIgnoreCase(String name);
 
     List<User> findAll();
+
     boolean existsUserByUsername(String login);
+
     boolean existsUserById(int id);
-//@Query("SELECT user from User user where user.email = :email")
-   // User getUserByUsername(@Param("email") String username);
 
 }

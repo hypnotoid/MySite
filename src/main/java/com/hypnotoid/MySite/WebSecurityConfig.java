@@ -21,11 +21,15 @@ public class WebSecurityConfig /* extends WebSecurityConfigurerAdapter */ {
     // https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
     private final UserRepository userRepository;
 
+    //@Autowired
+    public WebSecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserService(userRepository);
     }
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -54,49 +58,33 @@ public class WebSecurityConfig /* extends WebSecurityConfigurerAdapter */ {
                 .authorizeRequests()
                 //add required roles here
                 //Registration related
-                .antMatchers("/register").hasAnyAuthority(Roles.ANONYMOUS.getName())
-                .antMatchers("/registerSuccess").hasAnyAuthority(Roles.ANONYMOUS.getName())
-                .antMatchers("/registerProcess").hasAnyAuthority(Roles.ANONYMOUS.getName())
+                .antMatchers("/register").hasAnyAuthority(Roles.ANONYMOUS.getName()).antMatchers("/registerSuccess").hasAnyAuthority(Roles.ANONYMOUS.getName()).antMatchers("/registerProcess")
+                .hasAnyAuthority(Roles.ANONYMOUS.getName())
                 //Product list related
-                .antMatchers("/productsList").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/productsListAdd20").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/productsListSave").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/productsListDelete").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/productsListFind").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/productsListSaveProcess").hasAnyAuthority(Roles.EDITOR.getName())
+                .antMatchers("/productsList").hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/productsListAdd20").hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/productsListSave")
+                .hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/productsListDelete").hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/productsListFind")
+                .hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/productsListSaveProcess").hasAnyAuthority(Roles.EDITOR.getName())
                 //User Products list related
-                .antMatchers("/userProductsList").hasAnyAuthority(Roles.USER.getName())
-                .antMatchers("/userProductsListFind").hasAnyAuthority(Roles.USER.getName())
+                .antMatchers("/userProductsList").hasAnyAuthority(Roles.USER.getName()).antMatchers("/userProductsListFind").hasAnyAuthority(Roles.USER.getName())
 
                 //User list related
                 .antMatchers("/usersList").hasAnyAuthority(Roles.EDITOR.getName())
                 //.antMatchers("/usersListAdd").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/usersListDelete").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/usersListSaveProcess").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/usersListSave").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/usersListEdit").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/usersListFind").hasAnyAuthority(Roles.EDITOR.getName())
+                .antMatchers("/usersListDelete").hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/usersListSaveProcess").hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/usersListSave")
+                .hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/usersListEdit").hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/usersListFind").hasAnyAuthority(Roles.EDITOR.getName())
                 //Admin page
-                .antMatchers("/admin").hasAnyAuthority(Roles.ADMIN.getName())
-                .antMatchers("/adminEncrypt").hasAnyAuthority(Roles.ADMIN.getName())
+                .antMatchers("/admin").hasAnyAuthority(Roles.ADMIN.getName()).antMatchers("/adminEncrypt").hasAnyAuthority(Roles.ADMIN.getName())
                 //Cart page
-                .antMatchers("/cart").hasAnyAuthority(Roles.USER.getName())
-                .antMatchers("/cartOrder").hasAnyAuthority(Roles.USER.getName())
-                .antMatchers("/cartDelete").hasAnyAuthority(Roles.USER.getName())
-                .antMatchers("/cartEdit").hasAnyAuthority(Roles.USER.getName())
-                .antMatchers("/buy").hasAnyAuthority(Roles.USER.getName())
+                .antMatchers("/cart").hasAnyAuthority(Roles.USER.getName()).antMatchers("/cartOrder").hasAnyAuthority(Roles.USER.getName()).antMatchers("/cartDelete")
+                .hasAnyAuthority(Roles.USER.getName()).antMatchers("/cartEdit").hasAnyAuthority(Roles.USER.getName()).antMatchers("/buy").hasAnyAuthority(Roles.USER.getName())
                 //User page
-                .antMatchers("/user").hasAnyAuthority(Roles.USER.getName())
-                .antMatchers("/userDelete").hasAnyAuthority(Roles.USER.getName())
-                .antMatchers("/userEdit").hasAnyAuthority(Roles.USER.getName())
+                .antMatchers("/user").hasAnyAuthority(Roles.USER.getName()).antMatchers("/userDelete").hasAnyAuthority(Roles.USER.getName()).antMatchers("/userEdit")
+                .hasAnyAuthority(Roles.USER.getName())
                 //Orders pages
-                .antMatchers("/orders").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/orderDelete").hasAnyAuthority(Roles.EDITOR.getName())
-                .antMatchers("/myOrders").hasAnyAuthority(Roles.USER.getName())
-                .antMatchers("/usersListSave").hasAnyAuthority(Roles.EDITOR.getName())
+                .antMatchers("/orders").hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/orderDelete").hasAnyAuthority(Roles.EDITOR.getName()).antMatchers("/myOrders")
+                .hasAnyAuthority(Roles.USER.getName()).antMatchers("/usersListSave").hasAnyAuthority(Roles.EDITOR.getName())
                 //Public pages
-                .antMatchers("/").permitAll().antMatchers("/error").permitAll()
-                .antMatchers("/styles.css").permitAll()
+                .antMatchers("/").permitAll().antMatchers("/error").permitAll().antMatchers("/styles.css").permitAll()
                 //blacklist others
                 .anyRequest().hasAnyAuthority(Roles.ADMIN.getName())
                 //and
@@ -108,11 +96,5 @@ public class WebSecurityConfig /* extends WebSecurityConfigurerAdapter */ {
 
         ;
         return http.build();
-    }
-
-
-    //@Autowired
-    public WebSecurityConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
     }
 }

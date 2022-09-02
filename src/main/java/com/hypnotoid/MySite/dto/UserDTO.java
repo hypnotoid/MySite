@@ -1,6 +1,6 @@
 package com.hypnotoid.MySite.dto;
 
-import com.hypnotoid.MySite.models.CartEntry;;
+import com.hypnotoid.MySite.models.CartEntry;
 
 import java.util.HashSet;
 import java.util.Set;

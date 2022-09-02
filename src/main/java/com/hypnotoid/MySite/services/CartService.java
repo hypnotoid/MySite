@@ -16,19 +16,20 @@ public class CartService {
     private final OrderDTOService orderService;
 
 
+    public CartService(ProductService productService, OrderDTOService orderService) {
+        this.productService = productService;
+        this.orderService = orderService;
+    }
+
     public void deleteItem(final int product_id, final Set<CartEntry> cart) {
         if (cart == null) return;
 
-        for (Iterator<CartEntry> iter = cart.iterator(); iter.hasNext(); ) {
-            CartEntry entry = iter.next();
-            if (entry.getProduct_id() == product_id) iter.remove();
-        }
+        cart.removeIf(entry -> entry.getProduct_id() == product_id);
     }
 
     public void setAmount(final int product_id, final int amount, final Set<CartEntry> cart) {
         if (cart == null || amount < 0) return;
-        for (Iterator<CartEntry> iter = cart.iterator(); iter.hasNext(); ) {
-            CartEntry entry = iter.next();
+        for (CartEntry entry : cart) {
             if (entry.getProduct_id() == product_id) {
                 Product product = productService.getById(product_id);
                 if (amount > 0 && product != null) {
@@ -36,16 +37,14 @@ public class CartService {
                         entry.setAmount(amount);
                         entry.setTotal_price();
                     }
-                }
-                else cart.remove(entry);
+                } else cart.remove(entry);
             }
         }
     }
 
     public void addItems(final int product_id, final int amount, final Set<CartEntry> cart) {
         if (cart == null || amount <= 0) return;
-        for (Iterator<CartEntry> iter = cart.iterator(); iter.hasNext(); ) {
-            CartEntry entry = iter.next();
+        for (CartEntry entry : cart) {
             if (entry.getProduct_id() == product_id) {
                 Product product = productService.getById(product_id);
                 if (product != null) {
@@ -88,13 +87,8 @@ public class CartService {
         for (Iterator<CartEntry> iter = cart.iterator(); iter.hasNext(); ) {
             CartEntry entry = iter.next();
             productService.order(entry.getProduct_id(), entry.getAmount());
-            orderService.add(entry.getProduct_id(),userId,entry.getAmount());
+            orderService.add(entry.getProduct_id(), userId, entry.getAmount());
             iter.remove();
         }
-    }
-
-    public CartService(ProductService productService, OrderDTOService orderService) {
-        this.productService = productService;
-        this.orderService = orderService;
     }
 }

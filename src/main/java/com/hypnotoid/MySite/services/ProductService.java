@@ -2,12 +2,10 @@ package com.hypnotoid.MySite.services;
 
 
 import com.hypnotoid.MySite.models.Product;
-import com.hypnotoid.MySite.models.User;
 import com.hypnotoid.MySite.repositories.OrderRepository;
 import com.hypnotoid.MySite.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +19,11 @@ public class ProductService {
 
 
     private final OrderRepository orderRepository;
+
+    public ProductService(ProductRepository productRepository, OrderRepository orderRepository) {
+        this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
+    }
 
     public void add20RandomProducts() {
         Random random = new Random();
@@ -39,27 +42,25 @@ public class ProductService {
         return Math.round(input * 10000) / 100.;
     }
 
-
     public List<Product> getTop10() {
-        return  productRepository.getTop10Orders();
+        return productRepository.getTop10Orders();
     }
 
-    public List<Product> removeAmount0(List<Product> products){
+    public List<Product> removeAmount0(List<Product> products) {
         if (products == null) return null;
         List<Product> out = new ArrayList<>();
-        for (Product product: products){
-            if (product.getAmount()>0) out.add(product);
+        for (Product product : products) {
+            if (product.getAmount() > 0) out.add(product);
         }
         return out;
     }
 
-    public int getAmountForID(int id){
+    public int getAmountForID(int id) {
         Product p = getById(id);
-        if (p!= null){
+        if (p != null) {
             return p.getAmount();
         } else return 0;
     }
-
 
     public List<Product> getAll() {
         return productRepository.findAll();
@@ -89,19 +90,17 @@ public class ProductService {
         }
         return products;
     }
-    public boolean existOrdersByProductId(int id){
+
+    public boolean existOrdersByProductId(int id) {
         Optional<Product> productOptional = productRepository.findById(id);
-        if (productOptional.isPresent()) {
-            return (orderRepository.existsByProduct(productOptional.get()));
-        }
-        return false;
+        return productOptional.filter(orderRepository::existsByProduct).isPresent();
     }
 
     public void deleteById(int id) {
         Optional<Product> productOptional = productRepository.findById(id);
         if (productOptional.isPresent()) {
             orderRepository.deleteAllByProduct(productOptional.get());
-             productRepository.deleteById(id);
+            productRepository.deleteById(id);
         }
     }
 
@@ -134,10 +133,5 @@ public class ProductService {
 
     public Product create() {
         return new Product();
-    }
-
-    public ProductService(ProductRepository productRepository, OrderRepository orderRepository) {
-        this.productRepository = productRepository;
-        this.orderRepository = orderRepository;
     }
 }

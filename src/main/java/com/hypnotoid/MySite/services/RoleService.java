@@ -12,12 +12,19 @@ import java.util.Set;
 @Service
 public class RoleService { //Role DAO
     private final RoleRepository roleRepository;
-    public Role get(Roles roles){
-        for (Role role: roleRepository.findAll()) {
+
+    //@Autowired
+    public RoleService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+
+    public Role get(Roles roles) {
+        for (Role role : roleRepository.findAll()) {
             if (role.getId() == roles.getId()) return role;
         }
         return null;
     }
+
     public boolean isEditor(User user) {
         if (user == null) return false;
         for (Role role : user.getRoles()) {
@@ -25,6 +32,7 @@ public class RoleService { //Role DAO
         }
         return false;
     }
+
     public boolean isAdmin(User user) {
         if (user == null) return false;
         for (Role role : user.getRoles()) {
@@ -33,16 +41,11 @@ public class RoleService { //Role DAO
         return false;
     }
 
-
-    public Set<Role> set(boolean isAdmin, boolean isEditor, boolean isUser){
+    public Set<Role> set(boolean isAdmin, boolean isEditor, boolean isUser) {
         Set<Role> roles = new HashSet<>();
         if (isAdmin) roles.add(get(Roles.ADMIN));
         if (isEditor) roles.add(get(Roles.EDITOR));
         if (isUser) roles.add(get(Roles.USER));
         return roles;
-    }
-    //@Autowired
-    public RoleService(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
     }
 }

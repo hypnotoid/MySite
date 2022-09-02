@@ -15,7 +15,9 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
 
 
     List<Product> findProductsByNameContainsIgnoreCase(String name);
+
     List<Product> findProductsByAmount(int amount);
+
     List<Product> findProductsByPrice(double price);
 
 

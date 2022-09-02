@@ -5,13 +5,14 @@ import com.hypnotoid.MySite.services.UserDTOService;
 import com.hypnotoid.MySite.validators.UserDTOValidator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,12 @@ public class RegistrationController {
     private final UserDTOService userDTOService;
     private final BCryptPasswordEncoder encoder;
     private final UserDTOValidator validator;
+
+    public RegistrationController(UserDTOService userDTOService, BCryptPasswordEncoder encoder, UserDTOValidator validator) {
+        this.userDTOService = userDTOService;
+        this.encoder = encoder;
+        this.validator = validator;
+    }
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -33,11 +40,9 @@ public class RegistrationController {
         return "register/register";
     }
 
-
     @PostMapping("/registerProcess")
     public String processRegister(@Valid @ModelAttribute("user") UserDTO user, BindingResult br, Model model) {
-        if (userDTOService.existByUsername(user.getUsername()))
-            br.rejectValue("username","","Этот логин уже занят");
+        if (userDTOService.existByUsername(user.getUsername())) br.rejectValue("username", "", "Этот логин уже занят");
         if (br.hasErrors()) {
             return "register/register";
         }
@@ -47,12 +52,5 @@ public class RegistrationController {
         model.addAttribute("firstname", user.getFirstname());
         model.addAttribute("lastname", user.getLastname());
         return "register/registerSuccess";
-    }
-
-
-    public RegistrationController(UserDTOService userDTOService, BCryptPasswordEncoder encoder, UserDTOValidator validator) {
-        this.userDTOService = userDTOService;
-        this.encoder = encoder;
-        this.validator = validator;
     }
 }

@@ -15,17 +15,22 @@ public class OrdersController {
     private final OrderDTOService orderService;
     private final UserDTOService userDTOService;
 
+    public OrdersController(OrderDTOService orderService, UserDTOService userDTOService) {
+        this.orderService = orderService;
+        this.userDTOService = userDTOService;
+    }
+
     @PostMapping("/orders")
     public String orders(final int id, Model model) {
-        if (!userDTOService.existById(id))  return "redirect:/usersList";
+        if (userDTOService.notExistById(id)) return "redirect:/usersList";
         model.addAttribute("orders", orderService.listAllOrdersForUser(id));
         model.addAttribute("userId", id);
         return "shop/orders";
     }
 
     @PostMapping("/orderDelete")
-    public String orderDelete(final int userId ,final int orderId, Model model) {
-        if (!userDTOService.existById(userId))  return "redirect:/usersList";
+    public String orderDelete(final int userId, final int orderId, Model model) {
+        if (userDTOService.notExistById(userId)) return "redirect:/usersList";
         orderService.deleteById(orderId);
         model.addAttribute("orders", orderService.listAllOrdersForUser(userId));
         model.addAttribute("userId", userId);
@@ -36,11 +41,5 @@ public class OrdersController {
     public String userOrders(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("orders", orderService.listAllOrdersForUser(user.getId()));
         return "shop/userOrders";
-    }
-
-
-    public OrdersController(OrderDTOService orderService, UserDTOService userDTOService) {
-        this.orderService = orderService;
-        this.userDTOService = userDTOService;
     }
 }
